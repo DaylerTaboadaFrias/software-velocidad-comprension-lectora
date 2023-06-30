@@ -25,7 +25,7 @@ Route::post("/signup", [AuthController::class, "signup"]);
 
 Route::group(["middleware" => "auth:sanctum"], function () {
     Route::post("/logout", [AuthController::class, "logout"]);
-    Route::get('events',EventController::class);
+    // Route::get('events',EventController::class);
 });
 
 
