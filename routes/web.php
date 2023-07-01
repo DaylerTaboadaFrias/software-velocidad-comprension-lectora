@@ -1,6 +1,7 @@
 <?php
 
 use App\Enums\Role;
+use App\Http\Controllers\UserController;
 use App\Models\Plan;
 use App\Models\OrdenPlan;
 use Illuminate\Support\Facades\Route;
@@ -33,6 +34,14 @@ Route::get('/dashboard', function () {
     $ordenes = OrdenPlan::with('plan')->where('user_id',auth()->user()->id)->paginate(9);
     return view('dashboard',compact('fotografo','organizacion','ordenes','plans'));
 })->middleware(['auth'])->name('dashboard');
+
+Route::get('/users', [UserController::class, 'listAll'])->middleware(['auth'])->name('users.listAll');
+
+Route::get('/users/banned', [UserController::class, 'bannedListAll'])->middleware(['auth'])->name('users.banned.listAll');
+Route::post('/users/banned/{user}', [UserController::class, 'bannedListAdd'])->middleware(['auth'])->name('users.banned.listAdd');
+
+Route::get('/users/notbanned', [UserController::class, 'notBannedListAll'])->middleware(['auth'])->name('users.notbanned.listAll');
+Route::post('/users/notbanned/{user}', [UserController::class, 'notBannedListAdd'])->middleware(['auth'])->name('users.notbanned.listAdd');
 
 
 Route::get('/process-payment/{plan}', [ProcessPaymentController::class, 'index']);
