@@ -11,6 +11,7 @@ use Laravel\Sanctum\HasApiTokens;
 class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
+
     /**
      * Get the photo1
      *
@@ -19,28 +20,9 @@ class User extends Authenticatable
      */
     public function getPhoto1Attribute($value)
     {
-        return env('APP_URL_IMAGES').$value;
+        return env('APP_URL_IMAGES') . $value;
     }
-    /**
-     * Get the photo1
-     *
-     * @param  string  $value
-     * @return string url imagen
-     */
-    public function getPhoto2Attribute($value)
-    {
-        return env('APP_URL_IMAGES').$value;
-    }
-    /**
-     * Get the photo1
-     *
-     * @param  string  $value
-     * @return string url imagen
-     */
-    public function getPhoto3Attribute($value)
-    {
-        return env('APP_URL_IMAGES').$value;
-    }
+
     /**
      * The attributes that are mass assignable.
      *
@@ -51,9 +33,8 @@ class User extends Authenticatable
         'email',
         'password',
         'photo1',
-        'photo2',
-        'photo3',
-        'role'
+        'role',
+        'banned',
     ];
 
     /**
@@ -79,7 +60,5 @@ class User extends Authenticatable
     {
         return $this->hasOne(UserEvent::class);
     }
-
-    
 
 }

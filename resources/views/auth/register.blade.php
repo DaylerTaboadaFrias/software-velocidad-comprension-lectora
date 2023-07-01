@@ -45,13 +45,13 @@
             <div class="mt-4">
                 <label for="role" class="leading-7 text-sm text-gray-600">{{ __("Que quieres ser ? :") }}</label>
                 <select id="role" name="role" class="w-full bg-white rounded border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">
-                        <option  value="Fotografo">Fotografo</option>
-                        <option  value="Organizacion">Organizadora de eventos</option>
+                        <option  value="Admin">Admin</option>
+                        <option  value="Cliente">Cliente</option>
                 </select>
             </div>
             <div class="relative mb-4">
                 <label class="leading-7 text-sm text-gray-600" for="image">Elija una foto de perfil :</label>
-                <input name="image" class="block w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 cursor-pointer dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" id="image" type="file">   
+                <input name="image" class="block w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 cursor-pointer dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" id="image" type="file">
             </div>
             <div class="flex items-center justify-end mt-4">
                 <a class="underline text-sm text-gray-600 hover:text-gray-900" href="{{ route('login') }}">

@@ -23,6 +23,7 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->enum('role', ['Admin', 'Cliente'])->default('Admin');
+            $table->boolean('banned')->default(false);
             $table->enum('suscribido', ['fb','fp','ob','op','Ninguno'])->default('Ninguno');
             $table->enum('working', ['Yes', 'No'])->default('No');
             $table->rememberToken();
