@@ -25,6 +25,10 @@ Route::post("/signup", [AuthController::class, "signup"]);
 
 Route::group(["middleware" => "auth:sanctum"], function () {
     Route::post("/logout", [AuthController::class, "logout"]);
+<<<<<<< HEAD
+=======
+    // Route::get('events',EventController::class);
+>>>>>>> 027f8948549e56926ea15a1b6490c36768724c53
 });
 
 Route::get('listar-categoria',[AuthController::class,"listarCategorias"]);

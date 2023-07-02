@@ -1,6 +1,7 @@
 <?php
 
 use App\Enums\Role;
+use App\Http\Controllers\UserController;
 use App\Models\Plan;
 use App\Models\OrdenPlan;
 use Illuminate\Support\Facades\Route;
@@ -62,6 +63,14 @@ Route::group(['prefix'=>'level'],function(){
     Route::get('{id}/destroy',[LevelController::class,'destroy'])->name('level.destroy');
     
 });
+Route::get('/users', [UserController::class, 'listAll'])->middleware(['auth'])->name('users.listAll');
+
+Route::get('/users/banned', [UserController::class, 'bannedListAll'])->middleware(['auth'])->name('users.banned.listAll');
+Route::post('/users/banned/{user}', [UserController::class, 'bannedListAdd'])->middleware(['auth'])->name('users.banned.listAdd');
+
+Route::get('/users/notbanned', [UserController::class, 'notBannedListAll'])->middleware(['auth'])->name('users.notbanned.listAll');
+Route::post('/users/notbanned/{user}', [UserController::class, 'notBannedListAdd'])->middleware(['auth'])->name('users.notbanned.listAdd');
+
 
 Route::get('/process-payment/{plan}', [ProcessPaymentController::class, 'index']);
 
