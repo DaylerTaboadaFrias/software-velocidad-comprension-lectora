@@ -13,13 +13,9 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('plans', function (Blueprint $table) {
+        Schema::create('type_events', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->decimal('cost', $precision = 11, $scale = 2);
-            $table->integer('amount_days');
-            $table->enum('type', ['Cliente'])->default('Cliente');
-            $table->enum('removed', ['Activado', 'Eliminado'])->default('Activado');
             $table->timestamps();
         });
     }
@@ -31,6 +27,5 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('plans');
     }
 };

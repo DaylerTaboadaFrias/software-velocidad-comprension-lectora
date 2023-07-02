@@ -27,7 +27,6 @@ class DatabaseSeeder extends Seeder
 
         \App\Models\User::factory()->create([
             'name' => 'Prueba',
-            'role' => Role::Admin,
             'working' => Working::No,
             'password' => Hash::make('12345678'),
             'email' => 'prueba@gmail.com',
@@ -42,6 +41,7 @@ class DatabaseSeeder extends Seeder
             'type' => Role::Cliente,
             'removed' => Removed::Activado
         ]);
+        
         \App\Models\Plan::factory()->create([
             'name' => 'Premium',
             'cost' => 19.99,
@@ -56,7 +56,6 @@ class DatabaseSeeder extends Seeder
             'permiso' => 'Habilitado',
             'removed' => Removed::Activado
         ]);
-
 
         \App\Models\Benefit::factory()->create([
             'description' => 'Envia ofertas a fotografos',
@@ -91,6 +90,48 @@ class DatabaseSeeder extends Seeder
             'plan_id' => 2,
             'permiso' => 'Habilitado',
             'removed' => Removed::Activado
+        ]);
+
+        \App\Models\TypeEvent::factory()->create([
+            'name' => 'Matrimonio'
+        ]);
+        \App\Models\TypeEvent::factory()->create([
+            'name' => 'Graduacion'
+        ]);
+        \App\Models\TypeEvent::factory()->create([
+            'name' => 'Conferencia'
+        ]);
+
+        \App\Models\TipoEjercicio::factory()->create([
+            'nombre' => 'Velocidad lectora'
+        ]);
+
+        \App\Models\TipoEjercicio::factory()->create([
+            'nombre' => 'Comprension lectora'
+        ]);
+
+        \App\Models\Categoria::factory()->create([
+            'nombre' => 'Niños'
+        ]);
+
+        \App\Models\Categoria::factory()->create([
+            'nombre' => 'Adolecentes'
+        ]);
+
+        \App\Models\Nivel::factory()->create([
+            'nombre' => 'Basico',
+            'categoria_id'=> 1
+        ]);
+
+        \App\Models\Nivel::factory()->create([
+            'nombre' => 'Avanzado',
+            'categoria_id'=> 1
+        ]);
+
+        \App\Models\Ejercicio::factory()->create([
+            'parrafo' => 'Hola mundo',
+            'nivel_id'=> 1,
+            'tipo_ejercicio_id'=> 1,
         ]);
     }
 }

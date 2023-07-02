@@ -40,7 +40,6 @@ class Event extends Model
             $event->code_qr = $token;
             $qrImagen = 'storage/qrs/'.date('YmdHis').'.svg';
             $event->code_qr_imagen = $qrImagen;
-            QrCode::generate($token, $qrImagen);
         });
     }
 

@@ -11,44 +11,22 @@
                 </div>  
 
                 <!-- Navigation Links -->
-                @if (auth()->user()->role == 'Organizacion')
-                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                        {{ __('Tus Planes') }}
-                    </x-nav-link>
-                </div>
-                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                    <x-nav-link :href="route('organizacion.trabajadores')" :active="request()->routeIs('organizacion.trabajadores')">
-                        {{ __('Tus Fotógrafos') }}
-                    </x-nav-link>
-                </div>
-                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                    <x-nav-link :href="route('organizacion.solicitud')" :active="request()->routeIs('organizacion.solicitud')">
-                        {{ __('Buscar Fotógrafos') }}
-                    </x-nav-link>
-                </div>
+                
                 <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
                     <x-nav-link :href="route('organizacion.eventos')" :active="request()->routeIs('organizacion.eventos')">
                         {{ __('Tus Eventos') }}
                     </x-nav-link>
                 </div>
-                @elseif(auth()->user()->role == 'Fotografo')
                 <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                        {{ __('Tus Planes') }}
+                    <x-nav-link :href="route('category.index')" :active="request()->routeIs('category.index')">
+                        {{ __('G.Categorias') }}
                     </x-nav-link>
                 </div>
                 <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                    <x-nav-link :href="route('fotografo.ofertas')" :active="request()->routeIs('fotografo.ofertas')">
-                        {{ __('Tus Ofertantes') }}
+                    <x-nav-link :href="route('level.index')" :active="request()->routeIs('level.index')">
+                        {{ __('G.Niveles') }}
                     </x-nav-link>
                 </div>
-                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                    <x-nav-link :href="route('organizacion.eventos')" :active="request()->routeIs('organizacion.eventos')">
-                        {{ __('Tus Eventos') }}
-                    </x-nav-link>
-                </div>
-                @endif
                 
             </div>
 

@@ -26,6 +26,8 @@ return new class extends Migration
             $table->integer('cantidad_personas');
             $table->string('detalle')->nullable($value = true);
             $table->enum('removed', ['Activado', 'Eliminado'])->default('Activado');
+            $table->unsignedBigInteger('type_event_id');
+            $table->foreign('type_event_id')->references('id')->on('type_events');
             $table->timestamps();
         });
     }
