@@ -119,6 +119,47 @@ class AuthController extends Controller
             $ejercicios->toArray(),
         );
     }
+
+    public function obtenerRecomendaciones(Request $request): JsonResponse {
+        $ejercicios = Ejercicio::select('id')->where('nivel_id' ,$request->nivelId)->get()->toArray();
+        $respuestas = Respuesta::whereIn('ejercicio_id',$ejercicios)->get();
+        foreach ($respuestas as $item) {
+            $total = $item->palabrasCorrectas + $item->palabrasIncorrectas;
+            if($item->intentos >= 3  ){
+
+            }
+            if($item->intentos_lectura >= 3 ){
+
+            }
+        }
+        dd($respuestas);
+        return $this->success(
+            "Ejercicios",
+            $ejercicios->toArray(),
+        );
+    }
+
+    public function enviarIntento(Request $request): JsonResponse 
+    {
+        $respuestaAnterior = Respuesta::where('user_id',$request->userId)->where('ejercicio_id',$request->ejercicioId)->first();
+        if($respuestaAnterior){
+            $respuestaAnterior->intentos_lectura =  $respuestaAnterior->intentos_lectura + 1;
+            $respuestaAnterior->save();
+        }else{
+            $respuestaAnterior = new Respuesta;
+            $respuestaAnterior->palabrasIncorrectas = 0;
+            $respuestaAnterior->palabrasCorrectas = 0;
+            $respuestaAnterior->intentos =  0;
+            $respuestaAnterior->intentos_lectura =  1;
+            $respuestaAnterior->user_id = $request->userId;
+            $respuestaAnterior->ejercicio_id =  $request->ejercicioId;
+            $respuestaAnterior->save();
+        }
+        return $this->success(
+            "Respuesta",
+            $respuestaAnterior->toArray(),
+        );
+    }
     public function enviarRespuesta(Request $request): JsonResponse {
         $validatedData = $request->validate([
             'audio' => 'required',
@@ -229,6 +270,7 @@ class AuthController extends Controller
                         $respuestaAnterior->palabrasIncorrectas = count($resultado['fallidas']);
                         $respuestaAnterior->palabrasCorrectas = count($resultado['acertadas']) ;
                         $respuestaAnterior->intentos =  1;
+                        $respuestaAnterior->intentos_lectura =  1;
                         $respuestaAnterior->user_id = $request->userId;
                         $respuestaAnterior->ejercicio_id =  $request->ejercicioId;
                         $respuestaAnterior->save();

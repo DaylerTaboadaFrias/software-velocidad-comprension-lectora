@@ -32,6 +32,8 @@ Route::get('listar-categoria',[AuthController::class,"listarCategorias"]);
 Route::post('listar-nivel',[AuthController::class,"listarNiveles"]);
 Route::post('listar-ejercicio',[AuthController::class,"listarEjercicios"]);
 Route::post('enviar-respuesta',[AuthController::class,"enviarRespuesta"]);
+Route::post('enviar-intento',[AuthController::class,"enviarIntento"]);
+Route::post('obtener-recomendacion-nivel',[AuthController::class,"obtenerRecomendaciones"]);
 Route::post('upload-profile1',[AuthController::class, 'uploadProfile1']);
 Route::post('obtener-respuesta',[AuthController::class,"obtenerRespuesta"]);
 

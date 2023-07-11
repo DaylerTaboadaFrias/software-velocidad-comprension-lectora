@@ -2,8 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\Category;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Level extends Model
 {
@@ -12,6 +13,6 @@ class Level extends Model
     protected $table = "nivel";
     public function category()
     {
-        return $this->belongsTo(category::class,'categoria_id');
+        return $this->belongsTo(Category::class,'categoria_id');
     }
 }

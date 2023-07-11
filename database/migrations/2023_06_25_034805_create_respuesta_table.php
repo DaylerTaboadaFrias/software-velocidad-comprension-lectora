@@ -17,6 +17,7 @@ return new class extends Migration
             $table->id();
             $table->integer('palabrasCorrectas')->nullable(true)->default(0);
             $table->integer('palabrasIncorrectas')->nullable(true)->default(0);
+            $table->integer('intentos_lectura')->nullable(true)->default(0);
             $table->integer('intentos')->nullable(true)->default(0);
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users');
