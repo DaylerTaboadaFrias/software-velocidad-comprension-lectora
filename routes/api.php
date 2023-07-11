@@ -25,10 +25,7 @@ Route::post("/signup", [AuthController::class, "signup"]);
 
 Route::group(["middleware" => "auth:sanctum"], function () {
     Route::post("/logout", [AuthController::class, "logout"]);
-<<<<<<< HEAD
-=======
     // Route::get('events',EventController::class);
->>>>>>> 027f8948549e56926ea15a1b6490c36768724c53
 });
 
 Route::get('listar-categoria',[AuthController::class,"listarCategorias"]);
@@ -36,6 +33,7 @@ Route::post('listar-nivel',[AuthController::class,"listarNiveles"]);
 Route::post('listar-ejercicio',[AuthController::class,"listarEjercicios"]);
 Route::post('enviar-respuesta',[AuthController::class,"enviarRespuesta"]);
 Route::post('upload-profile1',[AuthController::class, 'uploadProfile1']);
+Route::post('obtener-respuesta',[AuthController::class,"obtenerRespuesta"]);
 
 Route::get('pago/{token}/{plan}/{user_id}/{orden_id}',[App\Http\Controllers\PagoController::class,'index'])->name('pagar');
 Route::post('pago/confirmar',[App\Http\Controllers\PagoController::class,'confirmar']);

@@ -8,6 +8,7 @@ use Aws\S3\S3Client;
 use App\Models\Nivel;
 use App\Models\Categoria;
 use App\Models\Ejercicio;
+use App\Models\Respuesta;
 use App\Traits\ApiResponder;
 use Illuminate\Http\Request;
 use Laravel\Sanctum\Sanctum;
@@ -104,7 +105,13 @@ class AuthController extends Controller
             $niveles->toArray(),
         );
     }
-    
+    public function obtenerRespuesta(Request $request): JsonResponse {
+        $ejercicio = Respuesta::where('ejercicio_id' ,$request->ejercicioId)->where('user_id' ,$request->userId)->first();
+        return $this->success(
+            "Respuesta",
+            $ejercicio,
+        );
+    }
     public function listarEjercicios(Request $request): JsonResponse {
         $ejercicios = Ejercicio::where('nivel_id' ,$request->nivelId)->get();
         return $this->success(
@@ -115,7 +122,9 @@ class AuthController extends Controller
     public function enviarRespuesta(Request $request): JsonResponse {
         $validatedData = $request->validate([
             'audio' => 'required',
-            'audio.*' => 'mimes:wav'
+            'audio.*' => 'mimes:wav',
+            'ejercicioId' => 'required',
+            'userId' => 'required'
             ]);
             $fechaRegistro = date('YmdHis'); 
             $transcriptionJobName = $fechaRegistro;
@@ -202,10 +211,33 @@ class AuthController extends Controller
                     $arr_data = json_decode($data);
                     
                     $respuesta = ($arr_data->results->transcripts[0]->transcript);
+                    $ejercicio = Ejercicio::where('id',$request->ejercicioId)->first();
+                    
+                    $parrafoOriginal = $ejercicio->parrafo;
+                    $resumenUsuario = $respuesta;
+                    $resultado = $this->compararParrafos($parrafoOriginal, $resumenUsuario);
+                    $cadenaRespuesta = '';
+                    $cadenaRespuesta = 'Acertaste '.count($resultado['acertadas']). ' palabras de '.count($resultado['fallidas']) ;
+                    $respuestaAnterior = Respuesta::where('user_id',$request->userId)->where('ejercicio_id',$request->ejercicioId)->first();
+                    if($respuestaAnterior){
+                        $respuestaAnterior->palabrasIncorrectas = count($resultado['fallidas']);
+                        $respuestaAnterior->palabrasCorrectas = count($resultado['acertadas']) ;
+                        $respuestaAnterior->intentos =  $respuestaAnterior->intentos + 1;
+                        $respuestaAnterior->save();
+                    }else{
+                        $respuestaAnterior = new Respuesta;
+                        $respuestaAnterior->palabrasIncorrectas = count($resultado['fallidas']);
+                        $respuestaAnterior->palabrasCorrectas = count($resultado['acertadas']) ;
+                        $respuestaAnterior->intentos =  1;
+                        $respuestaAnterior->user_id = $request->userId;
+                        $respuestaAnterior->ejercicio_id =  $request->ejercicioId;
+                        $respuestaAnterior->save();
+                    }
                    $request->file('audio')->move($destinationPath, $profileImage);
             }
         return $this->success(
-            $respuesta
+            "Respuesta",
+            $respuestaAnterior
         );
     }
     public function uploadProfile1(Request $request): JsonResponse {
@@ -226,6 +258,24 @@ class AuthController extends Controller
             }
         return $this->success(
             $user->photo1
+        );
+    }
+
+    function compararParrafos($parrafoOriginal, $resumenUsuario) {
+        // Convertir los párrafos a arrays de palabras
+        $palabrasOriginal = preg_split('/\s+/', $parrafoOriginal);
+        $palabrasUsuario = preg_split('/\s+/', $resumenUsuario);
+        $palabrasOriginalFiltradas = array_filter($palabrasOriginal, function($palabra) {
+            return strlen($palabra) > 1;
+        });
+        // Obtener las palabras en las que acertó y en las que no
+        $palabrasAcertadas = array_intersect($palabrasOriginal, $palabrasUsuario);
+        $palabrasFallidas = array_diff($palabrasOriginal, $palabrasUsuario);
+        
+        // Retornar los resultados
+        return array(
+            'acertadas' => $palabrasAcertadas,
+            'fallidas' => $palabrasFallidas
         );
     }
 }

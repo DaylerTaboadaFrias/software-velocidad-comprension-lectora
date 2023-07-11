@@ -18,6 +18,7 @@ return new class extends Migration
             $table->text('descripcion')->nullable(true);
             $table->text('nombre')->nullable(true);
             $table->unsignedBigInteger('categoria_id');
+            $table->text('imagen')->nullable(true);
             $table->foreign('categoria_id')->references('id')->on('categoria');
             $table->timestamps();
         });

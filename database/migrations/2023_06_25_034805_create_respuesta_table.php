@@ -13,8 +13,11 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('respuestas', function (Blueprint $table) {
+        Schema::create('respuesta', function (Blueprint $table) {
             $table->id();
+            $table->integer('palabrasCorrectas')->nullable(true)->default(0);
+            $table->integer('palabrasIncorrectas')->nullable(true)->default(0);
+            $table->integer('intentos')->nullable(true)->default(0);
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users');
             $table->unsignedBigInteger('ejercicio_id');
@@ -30,6 +33,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('respuestas');
+        Schema::dropIfExists('respuesta');
     }
 };

@@ -9,4 +9,10 @@ class Categoria extends Model
 {
     use HasFactory;
     protected $table = "categoria";
+    protected $appends = ['imagen_movil'];
+
+    public function getImagenMovilAttribute() 
+    { 
+        return env('APP_URL_IMAGES').$this->imagen;
+    }
 }
