@@ -11,7 +11,7 @@
                 </div>
 
                 <!-- Navigation Links -->
-                
+
                 <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
                     <x-nav-link :href="route('organizacion.eventos')" :active="request()->routeIs('organizacion.eventos')">
                         {{ __('Tus Eventos') }}
@@ -27,7 +27,7 @@
                         {{ __('G.Niveles') }}
                     </x-nav-link>
                 </div>
-                
+
 
             </div>
 
@@ -56,11 +56,13 @@
                                 {{ __('Dashboard') }}
                             </x-dropdown-link>
                         </div>
-                        <div>
-                            <x-dropdown-link :href="route('users.listAll')">
-                                {{ __('Gestionar usuarios') }}
-                            </x-dropdown-link>
-                        </div>
+                        @if (Auth::user()->isAdmin())
+                            <div>
+                                <x-dropdown-link :href="route('users.listAll')">
+                                    {{ __('Gestionar usuarios') }}
+                                </x-dropdown-link>
+                            </div>
+                        @endif
                         <div>
                             <!-- Authentication -->
                             <form method="POST" action="{{ route('logout') }}">
