@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use Exception;
 use stdClass;
 use App\Models\User;
 use Aws\S3\S3Client;
@@ -139,7 +140,7 @@ class AuthController extends Controller
         );
     }
 
-    public function enviarIntento(Request $request): JsonResponse 
+    public function enviarIntento(Request $request): JsonResponse
     {
         $respuestaAnterior = Respuesta::where('user_id',$request->userId)->where('ejercicio_id',$request->ejercicioId)->first();
         if($respuestaAnterior){
@@ -167,7 +168,7 @@ class AuthController extends Controller
             'ejercicioId' => 'required',
             'userId' => 'required'
             ]);
-            $fechaRegistro = date('YmdHis'); 
+            $fechaRegistro = date('YmdHis');
             $transcriptionJobName = $fechaRegistro;
             $FileName = $fechaRegistro.'.wav';
             $bucketName = 'pruebataboada';
@@ -198,7 +199,7 @@ class AuthController extends Controller
                     'secret' => 'Mv0ICqh1yWSSViBU2LNeBbUNZbfc1ZQpQJIz99Fo',
                 ],
             ]);
-            
+
             if($request->hasfile('audio'))
             {
                    $user =  User::find(request('userId'));
@@ -230,11 +231,11 @@ class AuthController extends Controller
                         $status = $client2->getTranscriptionJob([
                             'TranscriptionJobName' => $transcriptionJobName
                         ]);
-                    
+
                         if ($status->get('TranscriptionJob')['TranscriptionJobStatus'] == 'COMPLETED') {
                             break;
                         }
-                    
+
                         sleep(5);
                     }
                     // download the converted txt file
@@ -250,10 +251,10 @@ class AuthController extends Controller
                     }
                     curl_close($curl);
                     $arr_data = json_decode($data);
-                    
+
                     $respuesta = ($arr_data->results->transcripts[0]->transcript);
                     $ejercicio = Ejercicio::where('id',$request->ejercicioId)->first();
-                    
+
                     $parrafoOriginal = $ejercicio->parrafo;
                     $resumenUsuario = $respuesta;
                     $resultado = $this->compararParrafos($parrafoOriginal, $resumenUsuario);
@@ -313,7 +314,7 @@ class AuthController extends Controller
         // Obtener las palabras en las que acertó y en las que no
         $palabrasAcertadas = array_intersect($palabrasOriginal, $palabrasUsuario);
         $palabrasFallidas = array_diff($palabrasOriginal, $palabrasUsuario);
-        
+
         // Retornar los resultados
         return array(
             'acertadas' => $palabrasAcertadas,
