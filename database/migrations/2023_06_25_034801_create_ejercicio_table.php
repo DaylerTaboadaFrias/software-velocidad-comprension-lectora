@@ -16,9 +16,8 @@ return new class extends Migration
         Schema::create('ejercicio', function (Blueprint $table) {
             $table->id();
             $table->text('titulo')->nullable(true);
-            $table->text('parrafo')->nullable(true);
             $table->text('recomendaciones')->nullable(true);
-            $table->text('velocidad');
+            $table->integer('velocidad')->nullable(true);
             $table->unsignedBigInteger('nivel_id');
             $table->foreign('nivel_id')->references('id')->on('nivel');
             $table->unsignedBigInteger('tipo_ejercicio_id');
