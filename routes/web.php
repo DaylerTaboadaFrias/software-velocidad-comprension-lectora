@@ -1,6 +1,7 @@
 <?php
 
 use App\Enums\Role;
+use App\Http\Controllers\EjercicioController;
 use App\Http\Controllers\UserController;
 use App\Models\Plan;
 use App\Models\OrdenPlan;
@@ -62,6 +63,8 @@ Route::group(['prefix' => 'level'], function () {
     Route::put('/{id}', [LevelController::class, 'update'])->name('level.update');
     Route::get('{id}/destroy', [LevelController::class, 'destroy'])->name('level.destroy');
 });
+
+Route::resource('ejercicios', EjercicioController::class);
 
 Route::group([
     'prefix' => 'users',

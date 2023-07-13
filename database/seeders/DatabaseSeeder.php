@@ -25,12 +25,13 @@ class DatabaseSeeder extends Seeder
         //     'email' => 'test@example.com',
         // ]);
 
+        /*
         \App\Models\User::factory()->create([
             'name' => 'Prueba',
             'working' => Working::No,
             'password' => Hash::make('12345678'),
             'email' => 'prueba@gmail.com',
-            'email_verified_at' => now(),  
+            'email_verified_at' => now(),
         ]);
 
 
@@ -41,7 +42,7 @@ class DatabaseSeeder extends Seeder
             'type' => Role::Cliente,
             'removed' => Removed::Activado
         ]);
-        
+
         \App\Models\Plan::factory()->create([
             'name' => 'Premium',
             'cost' => 19.99,
@@ -101,37 +102,44 @@ class DatabaseSeeder extends Seeder
         \App\Models\TypeEvent::factory()->create([
             'name' => 'Conferencia'
         ]);
+        */
 
         \App\Models\TipoEjercicio::factory()->create([
             'nombre' => 'Velocidad lectora'
         ]);
 
         \App\Models\TipoEjercicio::factory()->create([
-            'nombre' => 'Comprension lectora'
+            'nombre' => 'Comprensión lectora'
         ]);
 
         \App\Models\Categoria::factory()->create([
-            'nombre' => 'Niños'
+            'nombre' => 'Niños',
+            'imagen' => '20230712202951_niños.png',
         ]);
 
         \App\Models\Categoria::factory()->create([
-            'nombre' => 'Adolecentes'
+            'nombre' => 'Adolecentes',
+            'imagen' => '20230712204233_adolescentes.png',
         ]);
 
         \App\Models\Nivel::factory()->create([
             'nombre' => 'Basico',
-            'categoria_id'=> 1
+            'categoria_id' => 1,
+            'imagen' => '20230712211031_cuentos-infantiles.jpg',
         ]);
 
         \App\Models\Nivel::factory()->create([
             'nombre' => 'Avanzado',
-            'categoria_id'=> 1
+            'categoria_id' => 2,
+            'imagen' => '20230712211308_cuentos-adolescentes.jpg',
         ]);
 
+        /*
         \App\Models\Ejercicio::factory()->create([
             'parrafo' => 'Hola mundo',
             'nivel_id'=> 1,
             'tipo_ejercicio_id'=> 1,
         ]);
+        */
     }
 }

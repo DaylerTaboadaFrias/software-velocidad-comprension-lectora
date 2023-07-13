@@ -8,11 +8,11 @@
     </x-slot>
 
     <div class="py-12">
-        
+
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="overflow-x-auto relative shadow-md sm:rounded-lg">
-                    
+
                     <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
                         <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                             <tr>
@@ -23,17 +23,17 @@
                                     Nombre
                                 </th>
                                 <th scope="col" class="py-3 px-6">
-                                    Operaciones 
+                                    Operaciones
                                 </th>
-                                
+
                             </tr>
                         </thead>
                         <tbody>
                             @forelse ($categories as $category)
                                 <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-                                    
+
                                     <td class="p-4 w-32">
-                                        <img class="w-50 h-50 rounded-full" src="{{ Storage::url('archivos/'.$category->imagen) }}"  alt="image description">
+                                        <img class="w-50 h-50 rounded-full" src="{{ $category->imagen_movil }}"  alt="image description">
                                     </td>
                                     <td class="py-4 px-6 font-semibold text-gray-900 dark:text-white">
                                         {{$category->id }}
@@ -48,7 +48,7 @@
                                                     Editar
                                                   </button>
                                             </a>
-                                            
+
                                             <form class="inline" method="POST" action="{{ route("category.destroy", [$category->id]) }}">
                                                 @csrf
                                                 @method("DELETE")
@@ -57,10 +57,10 @@
                                                 Eliminar
                                                 </button>
                                             </form>
-                                            
+
                                     </td>
-                                        
-                                </tr>  
+
+                                </tr>
                             @empty
                                 <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"><td class="py-4 px-6">No hay registros</td></tr>
                             @endforelse
@@ -70,7 +70,7 @@
             </div>
         </div>
     </div>
-    
+
 
 
 </x-app-layout>

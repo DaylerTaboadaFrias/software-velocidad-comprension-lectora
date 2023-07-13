@@ -27,8 +27,11 @@
                         {{ __('G.Niveles') }}
                     </x-nav-link>
                 </div>
-
-
+                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                    <x-nav-link :href="route('ejercicios.index')" :active="request()->routeIs('ejercicios.index')">
+                        {{ __('G.Ejercicios') }}
+                    </x-nav-link>
+                </div>
             </div>
 
             <!-- Settings Dropdown -->
