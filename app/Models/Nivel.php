@@ -18,7 +18,7 @@ class Nivel extends Model
 
     public function getImagenMovilAttribute()
     {
-        return env('APP_URL_IMAGES') . $this->imagen;
+        return env('APP_URL').'/images/'.$this->imagen;
     }
 
 }
