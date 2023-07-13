@@ -23,5 +23,6 @@ Homestead.json
 /.vagrant
 .phpunit.result.cache
 .vscode/
+.env
 .expo/
 public/build

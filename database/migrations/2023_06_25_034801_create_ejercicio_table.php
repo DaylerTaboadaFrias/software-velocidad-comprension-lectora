@@ -18,8 +18,7 @@ return new class extends Migration
             $table->text('titulo')->nullable(true);
             $table->text('parrafo')->nullable(true);
             $table->text('recomendaciones')->nullable(true);
-            $table->integer('puntuacion')->nullable(true);
-            $table->integer('velocidad')->nullable(true);
+            $table->text('velocidad');
             $table->unsignedBigInteger('nivel_id');
             $table->foreign('nivel_id')->references('id')->on('nivel');
             $table->unsignedBigInteger('tipo_ejercicio_id');
