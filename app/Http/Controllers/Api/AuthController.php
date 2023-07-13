@@ -123,19 +123,18 @@ class AuthController extends Controller
     public function obtenerRecomendaciones(Request $request): JsonResponse {
         $ejercicios = Ejercicio::select('id')->where('nivel_id' ,$request->nivelId)->get()->toArray();
         $respuestas = Respuesta::whereIn('ejercicio_id',$ejercicios)->get();
+        $arrayEjercicios = [];
         foreach ($respuestas as $item) {
             $total = $item->palabrasCorrectas + $item->palabrasIncorrectas;
-            if($item->intentos >= 3  ){
-
-            }
-            if($item->intentos_lectura >= 3 ){
-
+            $porcentaje = (100*$item->palabrasCorrectas)/$total;
+            if($item->intentos >= 3 ||  $item->intentos_lectura >= 3 || $porcentaje >= 51){
+                $ejercicio = Ejercicio::where('id' ,$item->ejercicio_id)->first();
+                array_push($arrayEjercicios,$ejercicio);
             }
         }
-        dd($respuestas);
         return $this->success(
-            "Ejercicios",
-            $ejercicios->toArray(),
+            "Ejercicios Recomendados",
+            $arrayEjercicios,
         );
     }
 
