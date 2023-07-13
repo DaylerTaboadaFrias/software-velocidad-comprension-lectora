@@ -1,6 +1,7 @@
 <?php
 
 use App\Enums\Role;
+use App\Http\Controllers\EjercicioController;
 use App\Http\Controllers\UserController;
 use App\Models\Plan;
 use App\Models\OrdenPlan;
@@ -26,15 +27,15 @@ use App\Http\Controllers\ProcessPaymentController;
 
 Route::get('/', function () {
     $plans = Plan::get();
-    return view('welcome',compact("plans"));
+    return view('welcome', compact("plans"));
 });
 
 Route::get('/dashboard', function () {
     $fotografo = Role::Cliente;
     $organizacion = Role::Organizacion;
-    $plans = Plan::with('beneficios')->where('type',auth()->user()->role)->get();
-    $ordenes = OrdenPlan::with('plan')->where('user_id',auth()->user()->id)->paginate(9);
-    return view('dashboard',compact('fotografo','organizacion','ordenes','plans'));
+    $plans = Plan::with('beneficios')->where('type', auth()->user()->role)->get();
+    $ordenes = OrdenPlan::with('plan')->where('user_id', auth()->user()->id)->paginate(9);
+    return view('dashboard', compact('fotografo', 'organizacion', 'ordenes', 'plans'));
 })->middleware(['auth'])->name('dashboard');
 
 Route::get('/organizacion/eventos', [EventController::class, 'listarOrganizacion'])->name('organizacion.eventos');
@@ -44,35 +45,40 @@ Route::delete('/organizacion/eventos/destroy/{evento}', [EventController::class,
 Route::get('/organizacion/eventos/edit/{evento}', [EventController::class, 'edit'])->name('evento.edit');
 Route::put('/organizacion/eventos/update/{evento}', [EventController::class, 'update'])->name('evento.update');
 
-Route::group(['prefix'=>'category'],function(){
-    Route::get('/',[CategoryController::class,'index'])->name('category.index');
-    Route::get('/create',[CategoryController::class,'create'])->name('category.create');
-    Route::post('/',[CategoryController::class,'store'])->name('category.store');
-    Route::get('{id}/edit',[CategoryController::class,'edit'])->name('category.edit');
-    Route::put('/{id}',[CategoryController::class,'update'])->name('category.update');
-    Route::get('{id}/destroy',[CategoryController::class,'destroy'])->name('category.destroy');
-    
+Route::group(['prefix' => 'category'], function () {
+    Route::get('/', [CategoryController::class, 'index'])->name('category.index');
+    Route::get('/create', [CategoryController::class, 'create'])->name('category.create');
+    Route::post('/', [CategoryController::class, 'store'])->name('category.store');
+    Route::get('{id}/edit', [CategoryController::class, 'edit'])->name('category.edit');
+    Route::put('/{id}', [CategoryController::class, 'update'])->name('category.update');
+    Route::get('{id}/destroy', [CategoryController::class, 'destroy'])->name('category.destroy');
+
 });
 
-Route::group(['prefix'=>'level'],function(){
-    Route::get('/',[LevelController::class,'index'])->name('level.index');
-    Route::get('/create',[LevelController::class,'create'])->name('level.create');
-    Route::post('/',[LevelController::class,'store'])->name('level.store');
-    Route::get('{id}/edit',[LevelController::class,'edit'])->name('level.edit');
-    Route::put('/{id}',[LevelController::class,'update'])->name('level.update');
-    Route::get('{id}/destroy',[LevelController::class,'destroy'])->name('level.destroy');
-    
+Route::group(['prefix' => 'level'], function () {
+    Route::get('/', [LevelController::class, 'index'])->name('level.index');
+    Route::get('/create', [LevelController::class, 'create'])->name('level.create');
+    Route::post('/', [LevelController::class, 'store'])->name('level.store');
+    Route::get('{id}/edit', [LevelController::class, 'edit'])->name('level.edit');
+    Route::put('/{id}', [LevelController::class, 'update'])->name('level.update');
+    Route::get('{id}/destroy', [LevelController::class, 'destroy'])->name('level.destroy');
 });
-Route::get('/users', [UserController::class, 'listAll'])->middleware(['auth'])->name('users.listAll');
 
-Route::get('/users/banned', [UserController::class, 'bannedListAll'])->middleware(['auth'])->name('users.banned.listAll');
-Route::post('/users/banned/{user}', [UserController::class, 'bannedListAdd'])->middleware(['auth'])->name('users.banned.listAdd');
+Route::resource('ejercicios', EjercicioController::class);
 
-Route::get('/users/notbanned', [UserController::class, 'notBannedListAll'])->middleware(['auth'])->name('users.notbanned.listAll');
-Route::post('/users/notbanned/{user}', [UserController::class, 'notBannedListAdd'])->middleware(['auth'])->name('users.notbanned.listAdd');
-
+Route::group([
+    'prefix' => 'users',
+    'middleware' => ['auth', 'role.admin'],
+    'controller' => UserController::class,
+], function () {
+    Route::get('/', 'listAll')->name('users.listAll');
+    Route::get('/banned', 'bannedListAll')->name('users.banned.listAll');
+    Route::post('/banned/{user}', 'bannedListAdd')->name('users.banned.listAdd');
+    Route::get('/notbanned', 'notBannedListAll')->name('users.notbanned.listAll');
+    Route::post('/notbanned/{user}', 'notBannedListAdd')->name('users.notbanned.listAdd');
+});
 
 Route::get('/process-payment/{plan}', [ProcessPaymentController::class, 'index']);
 
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';

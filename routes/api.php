@@ -37,6 +37,8 @@ Route::post('obtener-recomendacion-nivel',[AuthController::class,"obtenerRecomen
 Route::post('upload-profile1',[AuthController::class, 'uploadProfile1']);
 Route::post('obtener-respuesta',[AuthController::class,"obtenerRespuesta"]);
 
+Route::post('generar-lectura',[AuthController::class,"generarLectura"]);
+
 Route::get('pago/{token}/{plan}/{user_id}/{orden_id}',[App\Http\Controllers\PagoController::class,'index'])->name('pagar');
 Route::post('pago/confirmar',[App\Http\Controllers\PagoController::class,'confirmar']);
 Route::post('pago/callback/{token}',[App\Http\Controllers\PagoController::class,'callback']);

@@ -9,4 +9,7 @@ class TipoEjercicio extends Model
 {
     use HasFactory;
     protected $table = "tipo_ejercicio";
+    protected $primaryKey = 'id';
+    protected $fillable = ['nombre'];
+    public $timestamps = true;
 }

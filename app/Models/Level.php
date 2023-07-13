@@ -11,8 +11,14 @@ class Level extends Model
     use HasFactory;
 
     protected $table = "nivel";
+
+    public function getImagenMovilAttribute()
+    {
+        return env('APP_URL_IMAGES') . $this->imagen;
+    }
+
     public function category()
     {
-        return $this->belongsTo(Category::class,'categoria_id');
+        return $this->belongsTo(Category::class, 'categoria_id');
     }
 }

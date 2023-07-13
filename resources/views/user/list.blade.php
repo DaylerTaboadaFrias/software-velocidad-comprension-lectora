@@ -18,10 +18,13 @@
                                     Foto
                                 </th>
                                 <th scope="col" class="py-3 px-6">
+                                    Nombre
+                                </th>
+                                <th scope="col" class="py-3 px-6">
                                     Email
                                 </th>
                                 <th scope="col" class="py-3 px-6">
-                                    Nombre
+                                    Rol
                                 </th>
                                 <th scope="col" class="py-3 px-6">
                                     Banned
@@ -32,14 +35,17 @@
                             @forelse ($users as $user)
                                 <tr class="">
                                     <td class="py-4 px-6  text-gray-900 dark:text-white">
-                                        <img src="/images/{{ $user->photo1 }}" alt=""
+                                        <img src="{{ $user->photo1 }}" alt=""
                                             style="width: auto; height: 56px; border-radius: 8px">
+                                    </td>
+                                    <td class="py-4 px-6  text-gray-900 dark:text-white">
+                                        {{ $user->name }}
                                     </td>
                                     <td class="py-4 px-6  text-gray-900 dark:text-white">
                                         {{ $user->email }}
                                     </td>
                                     <td class="py-4 px-6  text-gray-900 dark:text-white">
-                                        {{ $user->name }}
+                                        {{ $user->role }}
                                     </td>
                                     <td class="py-4 px-6  text-gray-900 dark:text-white">
                                         <!-- Banned -->
