@@ -43,6 +43,7 @@ class EjercicioController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
+            'titulo' => 'required|string',
             'recomendaciones' => 'required|string',
             'velocidad' => 'required|numeric',
             'lecturas' => 'required|array',
@@ -57,6 +58,7 @@ class EjercicioController extends Controller
         }
 
         $ejercicios = new Ejercicio;
+        $ejercicios->titulo = $request->input('titulo');
         $ejercicios->recomendaciones = $request->input('recomendaciones');
         $ejercicios->velocidad = $request->input('velocidad');
         $ejercicios->nivel_id = $request->input('nivel_id');
@@ -106,9 +108,10 @@ class EjercicioController extends Controller
 
         $validator = Validator::make($request->all(), [
             'recomendaciones' => 'required|string',
+            'titulo' => 'required|string',
             // 'puntuacion' => ['required', 'regex:/^\d+(\.\d{1,2})?$/'],
             //'puntuacion' => 'required|numeric|regex:/^[\d]{0,11}(\.[\d]{1,2})?$/',
-            //décimas obligatoria
+            //décimas obligatoria,
             'velocidad' => 'required|numeric',
             'lecturas' => 'required|array',
             'palabrasClave' => 'required|array',
@@ -121,6 +124,7 @@ class EjercicioController extends Controller
             return redirect()->back()->withErrors($validator)->withInput();
         }
 
+        $ejercicios->titulo = $request->input('titulo');
         $ejercicios->recomendaciones = $request->input('recomendaciones');
         //$ejercicios->puntuacion = $request->input('puntuacion');
         $ejercicios->velocidad = $request->input('velocidad');

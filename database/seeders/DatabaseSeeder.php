@@ -18,14 +18,12 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        // \App\Models\User::factory(10)->create();
+        //\App\Models\User::factory(10)->create();
 
         // \App\Models\User::factory()->create([
         //     'name' => 'Test User',
         //     'email' => 'test@example.com',
         // ]);
-
-        /*
         \App\Models\User::factory()->create([
             'name' => 'Prueba',
             'working' => Working::No,
@@ -33,6 +31,35 @@ class DatabaseSeeder extends Seeder
             'email' => 'prueba@gmail.com',
             'email_verified_at' => now(),
         ]);
+        \App\Models\Plan::factory()->create([
+            'name' => 'Basic',
+            'cost' => 9.99,
+            'amount_days' => 30,
+            'type' => Role::Cliente,
+            'removed' => Removed::Activado
+        ]);
+        \App\Models\Benefit::factory()->create([
+            'description' => 'Acceso al registro de eventos',
+            'plan_id' => 1,
+            'permiso' => 'Habilitado',
+            'removed' => Removed::Activado
+        ]);
+
+        \App\Models\Benefit::factory()->create([
+            'description' => 'Envia ofertas a fotografos',
+            'plan_id' => 1,
+            'permiso' => 'Deshabilitado',
+            'removed' => Removed::Activado
+        ]);
+
+        \App\Models\Benefit::factory()->create([
+            'description' => 'Asistencia con I.A hacia tus clientes',
+            'plan_id' => 1,
+            'permiso' => 'Deshabilitado',
+            'removed' => Removed::Activado
+        ]);
+        /*
+        
 
 
         \App\Models\Plan::factory()->create([

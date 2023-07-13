@@ -11,7 +11,7 @@ class Ejercicio extends Model
     use HasFactory;
     protected $table = 'ejercicio';
     protected $primaryKey = 'id';
-    protected $fillable = ['recomendaciones', 'velocidad', 'nivel_id', 'tipo_ejercicio_id'];
+    protected $fillable = ['recomendaciones', 'velocidad', 'nivel_id', 'tipo_ejercicio_id','titulo'];
     public $timestamps = true;
 
 

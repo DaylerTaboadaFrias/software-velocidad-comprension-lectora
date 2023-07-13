@@ -2,16 +2,14 @@
 
 namespace App\Http\Controllers\Api;
 
-use Illuminate\Support\Facades\Log;
+use stdClass;
 
-use OpenAI\Laravel\Facades\OpenAI;
 
 use Exception;
-use GrahamCampbell\ResultType\Success;
-use stdClass;
 use App\Models\User;
 use Aws\S3\S3Client;
 use App\Models\Nivel;
+use App\Models\Lectura;
 use App\Models\Categoria;
 use App\Models\Ejercicio;
 use App\Models\Respuesta;
@@ -19,9 +17,12 @@ use App\Traits\ApiResponder;
 use Illuminate\Http\Request;
 use Laravel\Sanctum\Sanctum;
 use Illuminate\Http\JsonResponse;
+use OpenAI\Laravel\Facades\OpenAI;
+use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use Aws\Rekognition\RekognitionClient;
+use GrahamCampbell\ResultType\Success;
 use Laravel\Sanctum\PersonalAccessToken;
 use Illuminate\Validation\ValidationException;
 use Aws\TranscribeService\TranscribeServiceClient;
@@ -127,13 +128,28 @@ class AuthController extends Controller
     public function listarEjercicios(Request $request): JsonResponse
     {
         $ejercicios = Ejercicio::where('nivel_id', $request->nivelId)->get();
+        $arrayEjercicios = [];
+        foreach ($ejercicios as $item) {
+            $lecturaAleatoria = Lectura::inRandomOrder()->where('id_ejercicio', $item->id)->first();
+            $ejercicio = new stdClass();
+            $ejercicio->id = $lecturaAleatoria->id;
+            $ejercicio->idEjercicio = $item->id;
+            $ejercicio->recomendaciones = $item->recomendaciones;
+            $ejercicio->velocidad = $item->velocidad;
+            $ejercicio->titulo = $item->titulo;
+            $ejercicio->nivel_id = $item->nivel_id;
+            $ejercicio->tipo_ejercicio_id = $item->tipo_ejercicio_id;
+            $ejercicio->created_at = $item->created_at;
+            $ejercicio->updated_at = $item->updated_at;
+            $ejercicio->parrafo = $lecturaAleatoria->parrafo;
+            array_push($arrayEjercicios,$ejercicio);
+        }
         return $this->success(
             "Ejercicios",
-            $ejercicios->toArray(),
+            $arrayEjercicios,
         );
     }
 
-<<<<<<< HEAD
     public function obtenerRecomendaciones(Request $request): JsonResponse {
         $ejercicios = Ejercicio::select('id')->where('nivel_id' ,$request->nivelId)->get()->toArray();
         $respuestas = Respuesta::whereIn('ejercicio_id',$ejercicios)->get();
@@ -143,20 +159,18 @@ class AuthController extends Controller
             $porcentaje = (100*$item->palabrasCorrectas)/$total;
             if($item->intentos >= 3 ||  $item->intentos_lectura >= 3 || $porcentaje >= 51){
                 $ejercicio = Ejercicio::where('id' ,$item->ejercicio_id)->first();
-                array_push($arrayEjercicios,$ejercicio);
-=======
-    public function obtenerRecomendaciones(Request $request): JsonResponse
-    {
-        $ejercicios = Ejercicio::select('id')->where('nivel_id', $request->nivelId)->get()->toArray();
-        $respuestas = Respuesta::whereIn('ejercicio_id', $ejercicios)->get();
-        foreach ($respuestas as $item) {
-            $total = $item->palabrasCorrectas + $item->palabrasIncorrectas;
-            if ($item->intentos >= 3) {
-
-            }
-            if ($item->intentos_lectura >= 3) {
-
->>>>>>> 68059aa3f8f3c0960d1fb9e670a20e3f29d3b59c
+                $lecturaAleatoria = Lectura::inRandomOrder()->where('id_ejercicio', $ejercicio->id)->first();
+            $ejercicioObj = new stdClass();
+            $ejercicioObj->id = $ejercicio->id;
+            $ejercicioObj->recomendaciones = $ejercicio->recomendaciones;
+            $ejercicioObj->velocidad = $ejercicio->velocidad;
+            $ejercicioObj->titulo = $ejercicio->titulo;
+            $ejercicioObj->nivel_id = $ejercicio->nivel_id;
+            $ejercicioObj->tipo_ejercicio_id = $ejercicio->tipo_ejercicio_id;
+            $ejercicioObj->created_at = $ejercicio->created_at;
+            $ejercicioObj->updated_at = $ejercicio->updated_at;
+            $ejercicioObj->parrafo = $lecturaAleatoria->parrafo;
+                array_push($arrayEjercicios,$ejercicioObj);
             }
         }
         return $this->success(
@@ -167,7 +181,7 @@ class AuthController extends Controller
 
     public function enviarIntento(Request $request): JsonResponse
     {
-        $respuestaAnterior = Respuesta::where('user_id', $request->userId)->where('ejercicio_id', $request->ejercicioId)->first();
+        $respuestaAnterior = Respuesta::where('user_id', $request->userId)->where('ejercicio_id', $request->ejeId)->first();
         if ($respuestaAnterior) {
             $respuestaAnterior->intentos_lectura = $respuestaAnterior->intentos_lectura + 1;
             $respuestaAnterior->save();
@@ -178,7 +192,7 @@ class AuthController extends Controller
             $respuestaAnterior->intentos = 0;
             $respuestaAnterior->intentos_lectura = 1;
             $respuestaAnterior->user_id = $request->userId;
-            $respuestaAnterior->ejercicio_id = $request->ejercicioId;
+            $respuestaAnterior->ejercicio_id = $request->ejeId;
             $respuestaAnterior->save();
         }
         return $this->success(
@@ -279,14 +293,15 @@ class AuthController extends Controller
             $arr_data = json_decode($data);
 
             $respuesta = ($arr_data->results->transcripts[0]->transcript);
-            $ejercicio = Ejercicio::where('id', $request->ejercicioId)->first();
+            $ejercicio = Lectura::where('id', $request->ejercicioId)->first();
+            $arriba = Ejercicio::where('id', $ejercicio->id_ejercicio)->first();
 
             $parrafoOriginal = $ejercicio->parrafo;
             $resumenUsuario = $respuesta;
             $resultado = $this->compararParrafos($parrafoOriginal, $resumenUsuario);
             $cadenaRespuesta = '';
             $cadenaRespuesta = 'Acertaste ' . count($resultado['acertadas']) . ' palabras de ' . count($resultado['fallidas']);
-            $respuestaAnterior = Respuesta::where('user_id', $request->userId)->where('ejercicio_id', $request->ejercicioId)->first();
+            $respuestaAnterior = Respuesta::where('user_id', $request->userId)->where('ejercicio_id', $arriba->id)->first();
             if ($respuestaAnterior) {
                 $respuestaAnterior->palabrasIncorrectas = count($resultado['fallidas']);
                 $respuestaAnterior->palabrasCorrectas = count($resultado['acertadas']);
@@ -299,7 +314,7 @@ class AuthController extends Controller
                 $respuestaAnterior->intentos = 1;
                 $respuestaAnterior->intentos_lectura = 1;
                 $respuestaAnterior->user_id = $request->userId;
-                $respuestaAnterior->ejercicio_id = $request->ejercicioId;
+                $respuestaAnterior->ejercicio_id = $arriba->id;
                 $respuestaAnterior->save();
             }
             $request->file('audio')->move($destinationPath, $profileImage);
