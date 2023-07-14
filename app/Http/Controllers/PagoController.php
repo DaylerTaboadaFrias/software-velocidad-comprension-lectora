@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Redirect;
 
 class PagoController extends Controller
@@ -21,6 +22,7 @@ class PagoController extends Controller
     public function index(Request $request,$token,$plan,$user_id,$orden_id)
     {
         //$factura = Factura::obtenerFacturaPorToken($token);
+        $token = Str::uuid();
         session()->put('token', $token);
         $merchant_id = Cybersource::getMerchantId();
         $df_org_id = Cybersource::getOrgId();
@@ -42,9 +44,8 @@ class PagoController extends Controller
             $plancito = Plan::findOrFail($plan);
             $price = $plancito->cost;
         }else if($plan == 0){
-            $orden = Order::findOrFail($orden_id);
-            $orden_id = $orden->id;
-            $price =$orden->total;
+            $plancito = Plan::findOrFail($plan);
+            $price = $plancito->cost;
         }
         return view('pago.index', [
                     //dd"factura"=>$factura,           

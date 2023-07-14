@@ -6,12 +6,14 @@ use stdClass;
 
 
 use Exception;
+use Carbon\Carbon;
 use App\Models\User;
 use Aws\S3\S3Client;
 use App\Models\Nivel;
 use App\Models\Lectura;
 use App\Models\Categoria;
 use App\Models\Ejercicio;
+use App\Models\OrdenPlan;
 use App\Models\Respuesta;
 use App\Traits\ApiResponder;
 use Illuminate\Http\Request;
@@ -127,25 +129,31 @@ class AuthController extends Controller
     }
     public function listarEjercicios(Request $request): JsonResponse
     {
+        $date = Carbon::now();
+        $estaSuscribido = OrdenPlan::where('user_id',$request->userId)->where('start_date','<=',$date)->where('end_date','>=',$date)->get(); 
         $ejercicios = Ejercicio::where('nivel_id', $request->nivelId)->get();
         $arrayEjercicios = [];
-        foreach ($ejercicios as $item) {
-            $lecturaAleatoria = Lectura::inRandomOrder()->where('id_ejercicio', $item->id)->first();
-            $ejercicio = new stdClass();
-            $ejercicio->id = $lecturaAleatoria->id;
-            $ejercicio->idEjercicio = $item->id;
-            $ejercicio->recomendaciones = $item->recomendaciones;
-            $ejercicio->velocidad = $item->velocidad;
-            $ejercicio->titulo = $item->titulo;
-            $ejercicio->nivel_id = $item->nivel_id;
-            $ejercicio->tipo_ejercicio_id = $item->tipo_ejercicio_id;
-            $ejercicio->created_at = $item->created_at;
-            $ejercicio->updated_at = $item->updated_at;
-            $ejercicio->parrafo = $lecturaAleatoria->parrafo;
-            array_push($arrayEjercicios,$ejercicio);
+        $mensaje = "Suscribete primero";
+        if((count($estaSuscribido) > 0)){
+            $mensaje = "Ejercicios";
+            foreach ($ejercicios as $item) {
+                $lecturaAleatoria = Lectura::inRandomOrder()->where('id_ejercicio', $item->id)->first();
+                $ejercicio = new stdClass();
+                $ejercicio->id = $lecturaAleatoria->id;
+                $ejercicio->idEjercicio = $item->id;
+                $ejercicio->recomendaciones = $item->recomendaciones;
+                $ejercicio->velocidad = $item->velocidad;
+                $ejercicio->titulo = $item->titulo;
+                $ejercicio->nivel_id = $item->nivel_id;
+                $ejercicio->tipo_ejercicio_id = $item->tipo_ejercicio_id;
+                $ejercicio->created_at = $item->created_at;
+                $ejercicio->updated_at = $item->updated_at;
+                $ejercicio->parrafo = $lecturaAleatoria->parrafo;
+                array_push($arrayEjercicios,$ejercicio);
+            }
         }
         return $this->success(
-            "Ejercicios",
+            $mensaje,
             $arrayEjercicios,
         );
     }

@@ -37,6 +37,7 @@
                 <div class="grid m-6 justify-self-center p-6 max bg-white rounded-lg border border-gray-200 shadow-md dark:bg-gray-800 dark:border-gray-700">
                     <div class="flex  space-x-2 justify-self-center">
                         <form method="post" action="{{url('api/pago/confirmar')}}" id="formulario" enctype="multipart/form-data">
+                            @csrf
                             <input type="hidden" name="profile_id" value="{{$profile_id}}">
                             <input type="hidden" name="access_key" value="{{$access_key_secure_acceptance}}">
                             <input type="hidden" name="transaction_uuid" value="{{$transaction_uuid}}">
