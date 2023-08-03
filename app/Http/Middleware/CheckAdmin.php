@@ -18,8 +18,8 @@ class CheckAdmin
     {
         if (auth()->check() && auth()->user()->isAdmin()) {
             return $next($request);
-        } else {
-            return redirect('dashboard');
         }
+        
+        return redirect('dashboard');
     }
 }
