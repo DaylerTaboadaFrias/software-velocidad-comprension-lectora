@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Lectura extends Model
 {
     use HasFactory;
-    protected $table = 'lecturas';
+    protected $table = 'lectura';
     protected $primaryKey = 'id';
     protected $fillable = ['parrafo', 'id_ejercicio', 'palabras_clave'];
     public $timestamps = false;

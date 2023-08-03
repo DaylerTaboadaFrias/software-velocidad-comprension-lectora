@@ -13,7 +13,7 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('lecturas', function (Blueprint $table) {
+        Schema::create('lectura', function (Blueprint $table) {
             $table->id();
             $table->text('parrafo')->nullable(true);
             $table->text('palabras_clave')->nullable(true);
