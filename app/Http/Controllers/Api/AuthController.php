@@ -375,29 +375,15 @@ class AuthController extends Controller
     function generarLectura(Request $request): JsonResponse
     {
         $request->validate([
-            //'categoria' => 'required|string|min:5|max:32|regex:/^(\p{L}\p{N})+(\p{L}\p{N}\p{Zs})+$/',
             'palabrasClave' => 'required|string|min:1|max:32',
         ]);
 
-        //$categoria = trim($request->categoria);
-
         $palabrasClave = $request->palabrasClave;
 
-        /*
-        $palabrasClave = trim($request->palabrasClave);
-        $palabras = explode(',', $palabrasClave);
-        $n = count($palabras);
-        for ($i = 0; $i < $n; $i++) {
-            $palabras[$i] = trim($palabras[$i]);
-        }
-        $palabrasClave = implode(', ', $palabras);
-        */
-
+        // Referencias:
         // https://github.com/openai-php/client
         // https://github.com/openai-php/laravel
         // https://github.com/openai/openai-cookbook/blob/main/examples/How_to_format_inputs_to_ChatGPT_models.ipynb
-
-        Log::info('Llamando a openapi');
 
         $result = OpenAI::chat()->create([
             'model' => 'gpt-3.5-turbo',
@@ -406,7 +392,6 @@ class AuthController extends Controller
                 ['role' => 'user', 'content' => "Por favor, genérame un cuento breve de un párrafo que hable sobre: $palabrasClave"],
             ]
         ]);
-        Log::info('Llamada OK');
 
         $texto = $result['choices'][0]['message']['content'];
 
