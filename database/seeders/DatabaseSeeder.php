@@ -30,6 +30,7 @@ class DatabaseSeeder extends Seeder
             'password' => Hash::make('12345678'),
             'email' => 'prueba@gmail.com',
             'email_verified_at' => now(),
+            'photo1' => '20230510060248.jpg',
         ]);
         \App\Models\Plan::factory()->create([
             'name' => 'Basic',
