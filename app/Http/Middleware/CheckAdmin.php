@@ -16,6 +16,10 @@ class CheckAdmin
      */
     public function handle(Request $request, Closure $next)
     {
-        return $next($request);
+        if (auth()->check() && auth()->user()->isAdmin()) {
+            return $next($request);
+        } else {
+            return redirect('dashboard');
+        }
     }
 }

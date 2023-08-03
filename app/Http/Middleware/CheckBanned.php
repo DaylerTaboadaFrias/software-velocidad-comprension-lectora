@@ -16,7 +16,11 @@ class CheckBanned
      */
     public function handle(Request $request, Closure $next)
     {
-        
+        if (auth()->check() && auth()->user()->banned) {
+            auth()->logout();
+            $message = 'Su cuenta ha sido suspendida. Por favor, contáctese con el administrador del sistema.';
+            return redirect()->route('login')->withErrors($message);
+        }
 
         return $next($request);
     }
