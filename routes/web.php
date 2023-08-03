@@ -52,7 +52,6 @@ Route::group(['prefix' => 'category'], function () {
     Route::get('{id}/edit', [CategoryController::class, 'edit'])->name('category.edit');
     Route::put('/{id}', [CategoryController::class, 'update'])->name('category.update');
     Route::get('{id}/destroy', [CategoryController::class, 'destroy'])->name('category.destroy');
-
 });
 
 Route::group(['prefix' => 'level'], function () {
@@ -68,7 +67,7 @@ Route::resource('ejercicios', EjercicioController::class);
 
 Route::group([
     'prefix' => 'users',
-    'middleware' => ['auth', 'role.admin'],
+    'middleware' => ['auth', 'check.admin'],
     'controller' => UserController::class,
 ], function () {
     Route::get('/', 'listAll')->name('users.listAll');

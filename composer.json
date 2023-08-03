@@ -15,7 +15,7 @@
         "laravel/sanctum": "^3.0",
         "laravel/tinker": "^2.7",
         "nesbot/carbon": "^2.62",
-        "openai-php/laravel": "^0.4.1",
+        "openai-php/laravel": "^0.6.3",
         "simplesoftwareio/simple-qrcode": "4.2"
     },
     "require-dev": {
